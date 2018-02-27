@@ -1,0 +1,8 @@
+<table id="tableid">
+	<tr>
+	<%rs.forEach(function(item){%>
+	<th>以搜索到名字为<%-item.name%>的用户</th>
+	 <th style="display: none;" id="receiveid"><%-item.id%></th>
+	<%})%>
+ </tr>
+</table>

@@ -1,0 +1,172 @@
+<script type="text/javascript" src="https://cache.amap.com/lbs/static/addToolbar.js"></script>
+<script src="//webapi.amap.com/ui/1.0/main.js"></script>
+<div id="container" style="height: 600px"></div>
+ <div class ='panel'>
+     <input id = 'input' value = '点击地图显示地址/输入地址显示位置' onfocus = 'this.value=""'></input>
+     <div id = 'message'></div>
+   </div>
+<style type="text/css">
+      body,html,#container{
+        height: 100%;
+        margin: 0px;
+        font-size: 12px;
+      }
+      .panel{
+        position: absolute;
+        right: 0px;
+        bottom: -54px;
+        background-color: #fff;
+        padding: 6px;
+        border: solid 1px silver;
+        border-radius: 3px;
+        box-shadow: 3px 4px 3px 0px silver;
+      }
+      .panel .bt{
+        float: left;
+        padding: 6px;
+        color: #09f;
+        border: solid 1px #09f;
+        background-color: #fff;
+        margin: 3px 9px;
+        cursor: pointer;
+        border-radius: 3px;
+      }
+      .mes{
+        border-top: solid 1px #09f;
+        margin-top: 19px;
+        padding: 5px 0;
+        padding-bottom: 0;
+        border-radius: 0;
+        border: 0;
+        color: #aaa;
+      }
+    </style>
+<script>
+    var map = new AMap.Map('container', {
+        resizeEnable: true,
+        zoom:11,
+        center: [116.397428, 39.90923]
+    });
+    AMap.plugin('AMap.Geocoder',function(){
+        var geocoder = new AMap.Geocoder({
+            city: "010"//城市，默认：“全国”
+        });
+        var marker = new AMap.Marker({
+            map:map,
+            bubble:true,
+            position: [116.480983, 39.8],
+            icon:'http://webapi.amap.com/images/0.png',
+        })
+   //          title:'ssssssss',
+   //          offset:new AMap.Pixel(-10,-20) 
+			// 	 });
+			// marker.setMap(map);
+			// marker.setLabel({
+			// offset: new AMap.Pixel(-10, -20),
+			// content: 'aaaa'
+			// });
+
+        var input = document.getElementById('input');
+        var message = document.getElementById('message');
+        map.on('click',function(e){
+        	 $('#myModal').modal('show');
+            marker.setPosition(e.lnglat);
+			$('#lng').val(e.lnglat.lng);
+			$('#lat').val(e.lnglat.lat);
+            geocoder.getAddress(e.lnglat,function(status,result){
+              if(status=='complete'){
+              	$('#address').val(result.regeocode.formattedAddress)
+                 input.value = result.regeocode.formattedAddress
+                 message.innerHTML = ''
+              }else{
+                 message.innerHTML = '无法获取地址'
+              }
+            })
+        })    
+        input.onchange = function(e){
+            var address = input.value;
+            geocoder.getLocation(address,function(status,result){
+              if(status=='complete'&&result.geocodes.length){
+                marker.setPosition(result.geocodes[0].location);
+                map.setCenter(marker.getPosition())
+                message.innerHTML = ''
+              }else{
+                message.innerHTML = '无法获取位置'
+              }
+            })
+        }
+
+    });
+
+AMap.plugin(['AMap.ToolBar','AMap.Scale','AMap.OverView'],
+    function(){
+        map.addControl(new AMap.ToolBar());
+
+        map.addControl(new AMap.Scale());
+
+        map.addControl(new AMap.OverView({isOpen:true}));
+});
+
+function idphotoChange(sourceId, targetId) {  
+    if (typeof FileReader === 'undefined') {  
+        alert('你的浏览器不支持FileReader接口！');  
+        return;  
+    }    
+    //检验是否为图像文件  
+    var file = document.getElementById(sourceId).files[0]; 
+    if(!/image\/\w+/.test(file.type)){  
+        alert("看清楚,这个需要图片！"); 
+	thisa.value=""
+        return false;
+        }
+    var reader = new FileReader();  
+    //将文件以Data URL形式读入页面  
+    reader.readAsDataURL(file);
+    reader.onload=function(e){  
+        //显示文件  
+        var img = document.getElementById(targetId);  
+          img.src = this.result;  
+        // result.innerHTML='<img src="' + this.result +'" alt="" />'; 
+    
+    } 
+};
+
+
+</script>
+
+ <!-- 模态框（Modal） -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">商店信息</h4>
+            </div>
+            <div class="modal-body" id="modal-body">
+             <form role="form" id="shopForm" name='shopForm' enctype="multipart/form-data" action='/homeshop' method="post">
+					 <div class="form-group">
+					   <label for="shopname" >商家名称</label>
+					   <input type="text" name='shopname' class="form-control" id="name" placeholder="请输入商家名称">
+					   <label for="shoptype">商店类型</label>
+					   <input type="password" name="shoptype" class="form-control" id="shoptype" placeholder="请输入商家类型">
+					   <label for="content">商店介绍</label>
+					    <textarea class="form-control" rows="3" style="resize:none;" name="content"></textarea>
+					    <label for="shopImg">商店图片</label>
+					    <input type="file" name="shopImg" id="shopImg" onchange="idphotoChange(this.id,'imgPre');" />
+                        <img id="imgPre" src="/images/filed/qingcharutupian.png" style="width: 200px;height: 200px;display: block;" /> 
+					    <label for="lng">经度</label>
+					   <input type="text" name="lng"class="form-control" id="lng" readonly=”readonly”>
+						 <label for="lat">纬度</label>
+					   <input type="text" name="lat"class="form-control" id="lat" readonly=”readonly”>
+					   	 <label for="address">地址</label>
+					   <input type="text" name="address"class="form-control" id="address" readonly=”readonly”>
+					 <div style="margin-left: 45%">
+					    <button type="submit" class="btn btn-default">提交</button>
+					     <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+					 </div>
+					</form>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+</html>

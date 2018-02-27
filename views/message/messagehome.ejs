@@ -1,0 +1,86 @@
+<script>
+	function addmessage(){
+     $('#addModal').modal('show');
+     $('#addmodal-body').load('message/messageNews')
+	}
+  var ids=null;
+  var receiveids=null;
+  function reply(id,receiveid){
+    ids=id;
+    receiveids=receiveid
+    $('#addModal').modal('show');
+     $('#addmodal-body').load('message/messagereply')
+  }
+  function messagereply(id,receiveid){
+    let content=$('#content').val();
+    $.post('/message/messagereply',{id:id,receiveid:receiveid,content:content},function(rs){
+      $('#main').html(rs);
+      $(".modal-backdrop").remove(); //消除遮罩层
+    })
+  }
+  function del(id){
+  if (confirm('确认删除')) {
+    $.post('/message/del',{id:id},function(rs){
+      if (rs==2||rs==3) {
+        alert('系统异常');
+      }else{
+        $('#main').html(rs);
+      }
+    })
+
+  }
+}
+
+</script>
+<div class="header clearfix" style="margin:20px 0px">
+  <div class="pull-right">
+    <button  type="button" onclick="addmessage()" class="btn btn-primary">+新消息</button>
+  </div>
+
+</div>
+<ul class="nav nav-pills nav-stacked">
+  <li class="active"><a href="#"><button type="button" class="btn btn-primary" data-toggle="collapse" 
+    data-target="#demo" style="margin-left: 90%"><i class="caret"></i></button></a></li>
+    <div id="demo" class="collapse in">
+  <table class="table table-bordered">
+  <thead>
+    <tr style="text-align: center;">
+      <th>发送者</th>
+      <th>内容</th>
+      <th>发送时间</th>
+      <th>操作</th>
+    </tr>
+  </thead>
+  <tbody>
+  	<%rs.forEach(function(row){%>
+  	<tr>
+  		<td><%-row.name%></td>
+  		<td><%-row.content%></td>
+  		<td><%-row.createtime.getFullYear()+'-'+(row.createtime.getMonth()+1)+'-'+row.createtime.getDate()+' '+(row.createtime.getHours()+8)+':'+row.createtime.getMinutes()+':'+row.createtime.getSeconds()%></td>
+  		<td><button class="btn btn-link" onclick="reply(<%-row.id%>,<%-row.sendid%>)">回复</button>
+        <button class="btn btn-link" onclick="del(<%-row.id%>)">删除</button></td>
+  	</tr>
+  	<%})%>
+  </tbody>
+</table>
+</div>
+</ul>
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+					&times;
+				</button>
+
+			</div>
+			<div class="addmodal-body" id="addmodal-body">
+    
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">关闭
+				</button>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal -->

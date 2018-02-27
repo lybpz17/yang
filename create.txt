@@ -1,0 +1,71 @@
+用户表
+create table users(
+	id bigint not null auto_increment primary key,
+	name varchar(60) not null,
+	pwd varchar(60) not null,
+	nicheng varchar(60) not null,
+	createtime timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	updtime datetime  DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    role tinyint not null default 1,
+	unique key nameuniq (name), 
+	unique key nichenguniq (nicheng)
+)ENGINE=innodb DEFAULT CHARSET=utf8;
+
+/认证表
+create table sellers(
+	id bigint not null auto_increment primary key,
+	uid bigint not null,
+	shopname varchar(120) not null,
+	idnumber varchar(60) not null,
+	idphoto varchar(240) not null,
+	idphotopath varchar(240) not null,
+	shoptype varchar(200) not null,
+	address varchar(200) not null,
+	email varchar(200) not null,
+	status tinyint not null default 0, /*0关闭，1营业*/
+	createtime timestamp not null DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	updtime timestamp not null  DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	unique key idnumberuniq (idnumber)
+)ENGINE=Innodb DEFAULT CHARSET=utf8;
+
+insert into users set name='admin',pwd='admin',nicheng='管理员',updtime=sysdate(),role=0;
+
+消息表
+create table message(
+id bigint not null auto_increment primary key,
+sendid bigint not null,
+receiveid bigint not null,
+content varchar(240) not null,
+createtime timestamp not null DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+updtime timestamp not null DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+)ENGINE=innodb DEFAULT CHARSET=utf8; 
+
+//商店表
+create table shopTables(
+	id bigint not null auto_increment primary key,
+	uid bigint not null,
+	shopname varchar(120) not null,
+	shoptype varchar(200) not null,
+	shopaddress varchar(200) not null,
+	content varchar(200) not null,
+	imagePath varchar(120) not null,
+	lng varchar(200) not null,
+	lat varchar(200) not null,
+	shoprole tinyint not null default 0, /*0关闭，1营业*/
+	createtime timestamp not null DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	updtime timestamp not null  DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+)ENGINE=Innodb DEFAULT CHARSET=utf8;
+//商品表
+create table goods(
+	id bigint not null auto_increment primary key,
+	uid bigint not null,
+	shopid bigint not null,
+	goodsname varchar(120) not null,
+	goodstype varchar(200) not null,
+	goodsnum bigint not null,
+	goodsprice decimal(9,2) not null,
+	goodspath varchar(120) not null,
+	goodsrole tinyint not null default 0, 
+	createtime timestamp not null DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	updtime timestamp not null  DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+)ENGINE=Innodb DEFAULT CHARSET=utf8;

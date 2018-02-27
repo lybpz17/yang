@@ -1,0 +1,30 @@
+
+       <form role="form" id="modifyForm" style="display: none;" name='modifyForm' action='/goodschange' method="post" enctype="multipart/form-data" onsubmit="return subInfo();">
+     <div class="form-group">
+
+      <label for="goodsname" >商品名称</label>
+       <input type="text" name='goodsname' value="<%-rss.goodsname%>" class="form-control" id="goodsname" placeholder="请输入名称">
+
+       <label for="goodstype">商品类型</label>
+       <input type="text" value="<%-rss.goodstype%>" name="goodstype" class="form-control" id="goodstype" placeholder="请输入类型">
+
+        
+        <label for="goodsprice">商品价格</label>
+       <input type="number" name="goodsprice" value="<%-rss.goodsprice%>" min="0.01" class="form-control" id="goodsprice" placeholder="请输入类型">
+
+        <label for="goodsnum">商品数量</label>
+       <input type="number"  value="<%-rss.goodsnum%>" name="goodsnum" min="1"class="form-control" id="goodsnum" placeholder="请输入类型">
+
+
+       <label for="goodsImg">商店图片</label>
+      <input type="file" name="goodsImage" id="goodsImage" onchange="Cha(this.id,'imgphoto');" />
+       <img id="imgphoto" src="http://localhost:3000/<%-rss.goodspath%>" style="width: 200px;height: 200px;display: block;" /> 
+
+
+
+     <div style="margin-left: 45%">
+        <button type="button" onclick="goodschange()" class="btn btn-default">提交</button>
+         <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+     </div>
+    </form>
+               

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>金拱门</title>
+	 <link type="text/css" rel="stylesheet" href="../images/css/waterfall.css" />
+  <link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">  
+   <script src="/javascripts/jquery-2.1.4.min.js"></script>
+   <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<script>
+  function message(){
+    $.get('message/message',function(data){
+      $('#main').html(data);
+      $('#badge').hide();
+    })
+    
+   }
+</script>
+<body>
+	<div class="row visible-on">
+        <div class="col-xs-1 col-sm-1"></div>
+        <div class="col-xs-10 col-sm-10">
+         <nav class="navbar navbar-default" role="navigation">
+          <div class="container-fluid">
+          <div class="navbar-header">
+              <a class="navbar-brand" href="#">金拱门</a>
+          </div>
+          <div style="margin-left: 40%">
+              <form class="navbar-form navbar-left" role="search">
+                  <div class="form-group">
+                      <input type="text" class="form-control" placeholder="Search">
+                  </div>
+                  <button type="submit" class="btn btn-default">搜索</button>
+              </form>
+          </div>
+             <div style="float:left;margin-top: 15px ;margin-left: 100px;">
+                您好,<%-loginbean.name%>
+               <a class="btn btn-link" onclick="message()">消息<span id="badge" class="badge"><%-rs.page%></span></a>
+              </div>
+          <div style="margin-left: 90%;margin-top: 7px">
+           <button type="button" class="btn btn-default"><a href='/logout'>注销</a></button>
+          </div>
+           
+          </div>
+      </nav>
+       <%-include ./adminLeft.ejs %>
+        </div>
+         <div class="col-xs-1 col-sm-1"></div>
+   </div>
+</body>
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html >
+<html lang="en">
+  <head>
+    <title>金拱门</title>
+    <link type="text/css" rel="stylesheet" href="../images/css/waterfall.css" />
+  <link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">  
+   <script src="/javascripts/jquery-2.1.4.min.js"></script>
+   <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  </head>
+  <script>
+var ids=null;
+var uids=null;
+function details(id,uid){
+    $('#myModal').modal('show');
+	  ids=id;
+		uids=uid;
+$.get('/admin/adminapplyInfo?id='+id,function(rhtml){
+		$('#modal-body').html(rhtml);
+	})
+   
+};
+  
+function agree(ids,uids){
+$.get('/admin/adminagree?id='+ids+'&&uid='+uids,function(rhtml){
+  if (rhtml==1) {
+    $('#myModal').modal('hide');
+        alert('审核成功')
+  $.get('/admin/admin',function(rhtml){
+   $('#main').html(rhtml)
+     })
+   }      
+})
+}
+
+
+function regect(ids,uids){
+  $.get('/admin/regect?id='+ids+'&&uid='+uids,function(rhtml){
+     $('#modal-body').html(rhtml) 
+     $('#modal-footer').hide()
+     })
+    
+}
+  </script>
+  <body>
+<table class="table">
+  <caption>用户申请表</caption>
+  <thead>
+    <tr>
+      <th>申请时间</th>
+      <th>商店名称</th>
+      <th>商店类型</th>
+      <th>操作</th>
+  </tr>
+  </thead>
+  <tbody>
+  	<%rs.forEach(function(row){%>
+    <tr class="active">	
+      <td><%-row.createtime.getFullYear()+'-'+(row.createtime.getMonth()+1)+'-'+row.createtime.getDate()+' '+(row.createtime.getHours()+8)+':'+row.createtime.getMinutes()+':'+row.createtime.getSeconds() %></td>
+      <td><%-row.shopname%></td>
+      <td><%-row.shoptype%></td>
+      <td><button type="button" class="btn btn-link" onclick="details(<%-row.id%>,<%-row.uid%>)">查看详情</button></td>
+    </tr> 
+    <%})%>
+  </tbody>
+</table>
+  </body>
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel"></h4>
+            </div>
+            <div class="modal-body" id="modal-body">
+            	 </div>
+            <div class="modal-footer" id="modal-footer" style="text-align: center;">
+                <button type="button" class="btn btn-default" onclick="agree(ids,uids)">同意</button>
+			    <button type="button" class="btn btn-default" onclick="regect(ids,uids)" >驳回</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+  </html>

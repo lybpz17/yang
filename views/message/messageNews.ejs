@@ -1,0 +1,44 @@
+<script>
+	function messageNews(){
+ let messageName =messageform.messageName.value;
+$.post('/message/messageNews',{messageName:messageName},function(rs){
+             console.log(rs);
+             if (rs==1) {
+             	alert('查无此人');
+             }else{
+             	$('#demand').html(rs).show();
+             }
+             
+		})
+	};
+	function messageContent(){
+		let receiveid=document.getElementById('receiveid').innerHTML;
+		let content=$('#content').val();
+		$.post('/message/messagecontent',{receiveid:receiveid,content:content},function(rs){
+            if (rs==0) {
+              alert('发送失败');
+            }else if (rs==1) {
+            	alert('系统异常稍后重试')
+            }else{
+             	alert('发送成功');
+             	$('#main').html(rs);
+             	$(".modal-backdrop").remove(); //消除遮罩层
+             }      
+		})
+	}
+</script>
+<form class="navbar-form navbar-left" id="messageform" action="message/messageNews" method="post" role="search" style="margin-bottom: 40px">
+  <div class="form-group">
+      <input type="text" id="messageName" class="form-control" name="messageName" placeholder="请输入搜索名字" style="width:350px;margin-left: 60px">
+  </div>
+   <button type="button" onclick="messageNews()" class="btn btn-default">搜索</button>
+  <div style="display: none; overflow: auto;margin-left: 100px;" id="demand"> 
+  </div>
+ 
+</form>
+<form action="messagecontent" method="post">
+	<div style="margin-top: 10px;margin-left: 80px"> 
+    <textarea name="content" id="content" cols="30" rows="5" style="width:400px;resize: none;border-radius: 5px"></textarea>
+   </div> 
+   <button type='button' onclick="messageContent()" style="margin:10px 45%;" class="btn btn-default" data-dismiss='modal'>发送</button>
+</form>

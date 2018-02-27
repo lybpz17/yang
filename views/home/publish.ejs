@@ -1,0 +1,210 @@
+<script>
+  function addshop(){
+     $('#myModal').modal('show')
+     $('#goosForm').show();
+     $('#modifyForm').hide();
+    
+  }
+
+  function idphotoChange(sourceId, targetId) {  
+    if (typeof FileReader === 'undefined') {  
+        alert('你的浏览器不支持FileReader接口！');  
+        return;  
+    }    
+    // var reader = new FileReader();  
+    // reader.onload = function(e) {  
+    //     var img = document.getElementById(targetId);  
+    //     img.src = this.result;  
+    // }  
+    // reader.readAsDataURL(document.getElementById(sourceId).files[0]);
+    //检验是否为图像文件  
+    var file = document.getElementById(sourceId).files[0]; 
+    if(!/image\/\w+/.test(file.type)){  
+        alert("看清楚,这个需要图片！"); 
+  thisa.value=""
+        return false;
+        }
+    var reader = new FileReader();  
+    //将文件以Data URL形式读入页面  
+    reader.readAsDataURL(file);
+    reader.onload=function(e){  
+        //显示文件  
+        var img = document.getElementById(targetId);  
+          img.src = this.result;  
+        // result.innerHTML='<img src="' + this.result +'" alt="" />'; 
+    
+    } 
+};
+
+function tijiao(){
+  // alert('aaaaaaaaaaa')
+  $.ajax({
+    url: '/goods',
+    type: 'POST',
+    cache: false,
+    data: new FormData($('#goosForm')[0]),
+    processData: false,
+    contentType: false
+  }).done(function(res) {    
+       alert("成功");
+       $(".modal-backdrop").remove(); //消除遮罩层
+       $('#myModal').modal('hide');  
+       $('#main').html(res);
+      }).fail(function(res) {
+    alert('上传失败');
+  }); 
+}
+function modify(id){
+  $.post('/modify',{id:id},function(rs){
+     $('#myModal').modal('show');
+     $('#goosForm').hide();
+     $('#modifyForm').html(rs)
+      $('#modifyForm').show()
+  })
+}
+function del(id){
+  if (confirm('确认删除')) {
+    $.post('/del',{id:id},function(rs){
+      console.log(rs);
+      if (rs==2||rs==3) {
+        alert('系统异常');
+      }else{
+        $('#main').html(rs);
+      }
+    })
+
+  }
+};
+function goodschange(){
+  $.ajax({
+    url: '/goodschange',
+    type: 'POST',
+    cache: false,
+    data: new FormData($('#modifyForm')[0]),
+    processData: false,
+    contentType: false
+  }).done(function(res) {  
+       alert("成功");
+     $(".modal-backdrop").remove(); //消除遮罩层
+     $('#myModal').modal('hide');
+     $('#main').html(res) 
+      }).fail(function(res) {
+    alert('上传失败');
+  }); 
+}
+function Cha(sourceId, targetId) {  
+    if (typeof FileReader === 'undefined') {  
+        alert('你的浏览器不支持FileReader接口！');  
+        return;  
+    }    
+    //检验是否为图像文件  
+    var file = document.getElementById(sourceId).files[0]; 
+    if(!/image\/\w+/.test(file.type)){  
+        alert("看清楚,这个需要图片！"); 
+  thisa.value=""
+        return false;
+        }
+    var reader = new FileReader();  
+    //将文件以Data URL形式读入页面  
+    reader.readAsDataURL(file);
+    reader.onload=function(e){  
+        //显示文件  
+        var img = document.getElementById(targetId);  
+          img.src = this.result;  
+        // result.innerHTML='<img src="' + this.result +'" alt="" />'; 
+    
+    } 
+};
+</script>
+<style>
+  th{
+    text-align: center;
+  }
+  td{
+    text-align: center;
+  }
+</style>
+<div class="header clearfix" style="margin:20px 0px">
+  <div class="pull-right">
+    <button  type="button" onclick="addshop()" class="btn btn-primary">+创建商品</button>
+  </div>
+
+</div>
+<ul class="nav nav-pills nav-stacked">
+  <li class="active"><a href="#"><button type="button" class="btn btn-primary" data-toggle="collapse" 
+    data-target="#demo" style="margin-left: 90%"><i class="caret"></i></button></a></li>
+    <div id="demo" class="collapse in">
+  <table class="table table-bordered">
+  <thead>
+    <tr style="text-align: center;">
+      <th>名称</th>
+      <th>类型</th>
+      <th>价格</th>
+      <th>数量</th>
+      <th>图片</th>
+      <th>上架时间</th>
+      <th>操作</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%rss.forEach(function(item){%>
+    <tr>
+      <td><%-item.goodsname%></td>
+      <td><%-item.goodstype%></td>
+      <td><%-item.goodsprice%></td>
+      <td><%-item.goodsnum%></td>
+      <td style="width: 70px;height: 70px"><img style="width: 100%" src='http://localhost:3000/<%-item.goodspath%>'/></td>
+      <td><%-item.updtime.getFullYear()+'-'+(item.createtime.getMonth()+1)+'-'+item.createtime.getDate()%></td>
+      <td><button type="button" class="btn btn-link " onclick="modify(<%-item.id%>)">修改</button>
+      <button type="button" class="btn btn-link" onclick="del(<%-item.id%>)">下架</button></td>
+    </tr>
+    <%})%>
+  </tbody>
+</table>
+</div>
+</ul>
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel"></h4>
+            </div>
+            
+            <div class="modal-body" id="modal-body">
+             <div>
+             <form role="form" id="goosForm" name='goosForm' action='/goos' method="post" enctype="multipart/form-data" onsubmit="return subInfo();">
+           <div class="form-group">
+
+          <label for="goodsname" >商品名称</label>
+           <input type="text" name='goodsname' class="form-control" id="goodsname" placeholder="请输入名称">
+
+           <label for="goodstype">商品类型</label>
+           <input type="text" name="goodstype" class="form-control" id="goodstype" placeholder="请输入类型">
+
+            
+            <label for="goodsprice">商品价格</label>
+           <input type="number" name="goodsprice" min="0.01" class="form-control" id="goodsprice" placeholder="请输入类型">
+
+            <label for="goodsnum">商品数量</label>
+           <input type="number" name="goodsnum" min="1"class="form-control" id="goodsnum" placeholder="请输入类型">
+
+
+           <label for="goodsImg">商店图片</label>
+          <input type="file" name="goodsImg" id="goodsImg" onchange="idphotoChange(this.id,'imgPre');" />
+    <img id="imgPre" src="/images/filed/qingcharutupian.png" style="width: 200px;height: 200px;display: block;" /> 
+
+       <div style="margin-left: 45%">
+            <button type="button" class="btn btn-default" onclick="tijiao()">提交</button>
+             <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+         </div>
+        </form>
+            </div>
+            <div>
+              <%-include ./modify.ejs%>
+            </div>  
+            </div>
+            
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>

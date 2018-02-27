@@ -1,0 +1,36 @@
+<script>
+   function renzheng(){
+     $('#main').load('Certification')
+   }
+    function publish(){
+     $('#main').load('map')
+   }
+   function management(){
+     $.post('/manage',function(rhtml){
+      $('#main').html(rhtml)
+     })
+   }
+</script>
+<div class="row">
+      <div class="col-xs-2 col-sm-2 col-md-2" style="background-color:#aaa">
+      	<table  align="center" height='600'>
+      		<tr><td>
+                 <%if(loginbean.role==1){%>
+                  <a href="#" onclick="renzheng()">身份认证</a>
+                  <%}else if(loginbean.role==2){%>
+                     身份审核中
+                  <%}else if(loginbean.role==3){%>
+                  <a href="#" onclick="publish()">发布商家信息</a>
+                  <%}else{%>
+                  已发布
+                  <%}%>
+                  <tr><td><a href="#" onclick="management()">管理营业点</a></td></tr>
+                   
+                  </td></tr>
+      		<tr><td>项目管理</td></tr>
+      		<tr><td>客户管理</td></tr>
+      	</table>
+      </div>
+      <div class="col-xs-9 col-sm-9 col-md-9 " id="main"></div>
+       <div class="col-xs-1 col-sm-1 col-md-1"></div>
+</div>

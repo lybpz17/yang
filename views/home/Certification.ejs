@@ -1,0 +1,100 @@
+<script>
+function idphotoChange(sourceId, targetId) {  
+    if (typeof FileReader === 'undefined') {  
+        alert('你的浏览器不支持FileReader接口！');  
+        return;  
+    }    
+    // var reader = new FileReader();  
+    // reader.onload = function(e) {  
+    //     var img = document.getElementById(targetId);  
+    //     img.src = this.result;  
+    // }  
+    // reader.readAsDataURL(document.getElementById(sourceId).files[0]);
+    //检验是否为图像文件  
+    var file = document.getElementById(sourceId).files[0]; 
+    if(!/image\/\w+/.test(file.type)){  
+        alert("看清楚,这个需要图片！"); 
+	thisa.value=""
+        return false;
+        }
+    var reader = new FileReader();  
+    //将文件以Data URL形式读入页面  
+    reader.readAsDataURL(file);
+    reader.onload=function(e){  
+        //显示文件  
+        var img = document.getElementById(targetId);  
+          img.src = this.result;  
+        // result.innerHTML='<img src="' + this.result +'" alt="" />'; 
+    
+    } 
+};
+ function subInfo(){
+            if(certificationForm.name.value==''){
+              alert('真实不允许空');
+              certificationForm.name.focus();
+              return false;
+            }
+            if(certificationForm.idnumber.value==''){
+              alert('身份证不允许空');
+              certificationForm.idnumber.focus();
+              return false;
+            }
+            if(certificationForm.phone.value==''){
+              alert('电话不允许空');
+              certificationForm.phone.focus();
+              return false;
+            }
+            if(certificationForm.email.value==''){
+              alert('email不允许空');
+              certificationForm.email.focus();
+              return false;
+            }
+            if(certificationForm.address.value==''){
+              alert('家庭住址不允许空');
+              certificationForm.address.focus();
+              return false;
+            }
+             if(certificationForm.idphoto.value==''){
+              alert('手持证件照不允许空');
+              certificationForm.idphoto.focus();
+              return false;
+            }
+            if(certificationForm.shopname.value==''){
+              alert('商店名称不允许空');
+              certificationForm.shopname.focus();
+              return false;
+            }
+          }  
+</script>
+<form role="form" id="certificationForm" name='certificationForm' action='/info/certification' method="post" enctype="multipart/form-data" onsubmit="return subInfo();">
+ <div class="form-group">
+   <label for="name" >真实姓名</label>
+   <input type="text" name='name' class="form-control" id="name" placeholder="请输入真实名称">
+   <label for="shopname" >商店名称</label>
+   <input type="text" name='shopname' class="form-control" id="shopname" placeholder="请输入真实名称">
+   <label for="idnumber">身份证号</label>
+   <input type="text" name="idnumber" class="form-control" id="idnumber" placeholder="请输入身份证号">
+   <label for="phone">电话</label>
+   <input type="text" name="phone" class="form-control" id="phone" placeholder="请输入电话">
+    <label for="phone">Email</label>
+   <input type="Email" name="email" class="form-control" id="email" placeholder="请输入email">
+   <label for="address">家庭住址</label>
+   <input type="text" name="address" class="form-control" id="address" placeholder="请输入家庭住址">
+   <div class="form-group">
+    <label for="name">商店类型</label>
+    <select class="form-control" name="shoptype" id="shoptype">
+      <option value="饮品店">饮品店</option>
+      <option value="快餐">快餐</option>
+      <option value="烧烤">烧烤</option>
+      <option value="火锅">火锅</option>
+      <option value="自助餐">自助餐</option>
+    </select>
+    </div>
+   	<label for="inputfile">手持证件照</label>
+    <input type="file" name="idphoto" id="idphoto" onchange="idphotoChange(this.id,'imgPre');" />
+    <img id="imgPre" src="/images/filed/qingcharutupian.png" style="width: 200px;height: 200px;display: block;" /> 
+   
+ <div style="margin-left: 45%">
+    <button type="submit" class="btn btn-default">提交</button>
+ </div>
+</form>

@@ -1,0 +1,32 @@
+<script>
+      function subInfo(){
+            if(registerForm.name.value==''){
+              alert('名称不允许空');
+              registerForm.name.focus();
+              return false;
+            }
+            if(registerForm.pwd.value==''){
+              alert('密码不允许空');
+              registerForm.pwd.focus();
+              return false;
+            }
+            if(registerForm.nicheng.value==''){
+              alert('昵称不允许为空');
+              registerForm.nicheng.focus();
+              return false;
+            }
+          }
+    </script>
+<form role="form" id="registerForm" name='registerForm' action='/register' method="post" onsubmit="return subInfo();">
+ <div class="form-group">
+   <label for="name" >名称</label>
+   <input type="text" name='name' class="form-control" id="name" placeholder="请输入名称">
+   <label for="pwd">密码</label>
+   <input type="password" name="pwd" class="form-control" id="pwd" placeholder="请输入密码">
+   <label for="nicheng" >昵称</label>
+   <input type="text" name='nicheng' class="form-control" id="nicheng" placeholder="请输入昵称">
+ </div>
+ <div style="margin-left: 45%">
+    <button type="submit" class="btn btn-default">注册</button>
+ </div>
+</form>

@@ -1,0 +1,26 @@
+<script>
+   function examine(){
+    $.get('/admin/admin',function(rhtml){
+     $('#main').html(rhtml)
+    })
+   }
+</script>
+<div class="row">
+      <div class="col-xs-2 col-sm-2 col-md-2" style="background-color:#aaa">
+      	<table  align="center" height='600'>
+      		<tr><td>
+                 
+                  <a href="#" onclick="examine()">身份审核</a>
+             
+                  <tr><td><a href="#" onclick="management()">管理营业点</a></td></tr>
+                   
+                  </td></tr>
+      		<tr><td>项目管理</td></tr>
+      		<tr><td>客户管理</td></tr>
+      	</table>
+      </div>
+      <div class="col-xs-9 col-sm-9 col-md-9 " id="main">
+        
+      </div>
+       <div class="col-xs-1 col-sm-1 col-md-1"></div>
+</div

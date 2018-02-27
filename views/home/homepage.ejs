@@ -1,0 +1,75 @@
+<script type="text/javascript" src="https://cache.amap.com/lbs/static/addToolbar.js"></script>
+<script src="//webapi.amap.com/ui/1.0/main.js"></script>
+<div id="container" style="height: 560px;margin-top: 40px"></div>
+<style type="text/css">
+      body,html,#container{
+        height: 100%;
+        margin: 0px;
+        font-size: 12px;
+      }
+      .panel{
+        position: absolute;
+        right: 5px;
+        bottom: 20px;
+        background-color: #fff;
+        padding: 6px;
+        border: solid 1px silver;
+        border-radius: 3px;
+        box-shadow: 3px 4px 3px 0px silver;
+      }
+      .panel .bt{
+        float: left;
+        padding: 6px;
+        color: #09f;
+        border: solid 1px #09f;
+        background-color: #fff;
+        margin: 3px 9px;
+        cursor: pointer;
+        border-radius: 3px;
+      }
+      .mes{
+        border-top: solid 1px #09f;
+        margin-top: 19px;
+        padding: 5px 0;
+        padding-bottom: 0;
+        border-radius: 0;
+        border: 0;
+        color: #aaa;
+      }
+    </style>
+<script>
+    var map = new AMap.Map('container', {
+        resizeEnable: true,
+        zoom:11,
+        center: [116.397428, 39.90923]
+    });
+    AMap.plugin('AMap.Geocoder',function(){
+        var geocoder = new AMap.Geocoder({
+            city: "010"//城市，默认：“全国”
+        });
+        <%rs.forEach(function(row) {%>
+        var marker = new AMap.Marker({
+            map:map,
+            bubble:true,
+            position:[<%-row.lng%>,<%-row.lat%>],
+            icon:'http://webapi.amap.com/images/0.png',
+            title:'<%-row.shopname%>',
+            offset:new AMap.Pixel(-10,-20),
+        })
+          marker.setMap(map);
+          marker.setLabel({
+          offset: new AMap.Pixel(-10, -20),
+          content: '<%-row.content%>'
+    				 });
+    		    <%})%>
+    			});
+
+AMap.plugin(['AMap.ToolBar','AMap.Scale','AMap.OverView'],
+    function(){
+        map.addControl(new AMap.ToolBar());
+
+        map.addControl(new AMap.Scale());
+
+        map.addControl(new AMap.OverView({isOpen:true}));
+});
+</script>

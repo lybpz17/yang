@@ -1,0 +1,49 @@
+ <table class="table">
+  <caption style="margin-left:30%;">
+      <strong> 商店名称:<%-rs.shopname%></strong>
+
+    </caption>
+
+    <tr>
+      <th>申请时间：</th>
+          <td><%-rs.createtime.getFullYear()+'-'+(rs.createtime.getMonth()+1)+'-'+rs.createtime.getDate()+' '+(rs.createtime.getHours()+8)+':'+rs.createtime.getMinutes()+':'+rs.createtime.getSeconds() %></td>
+    </tr>
+      
+
+    <tr>
+        <th>商店类型：</th>
+         <td><%-rs.shoptype%></td>
+    </tr>
+    <tr>
+        <th>身份证号：</th>
+        <td><%-rs.idnumber%></td>
+    </tr>
+    <tr>
+        
+        <th>邮箱地址：</th>
+         <td><%-rs.email%></td>
+
+    </tr>
+    <tr>
+         <th>家庭住址：</th>
+          <td><%-rs.address%></td>
+
+    </tr>
+     <tr>
+         <th>联系电话：</th>
+          <td><%-rs.phone%></td>
+
+    </tr>
+    <tr>
+        <th>证件照：</th>
+        <td><img style="width: 200px;height: 200px;display: block;" src=<%-rs.idphotopath%>>  </td>
+    </tr>
+   <!-- <tr>
+   	<td>
+   		<button type="button" class="btn btn-default" >同意</button>
+		<button type="button" class="btn btn-default"  >驳回</button>
+   	</td>
+   </tr> -->
+
+</table>
+           
